@@ -31,44 +31,32 @@
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
+  <!-- Build Settings -->
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.lazerycode.jmeter</groupId>
+        <artifactId>jmeter-maven-plugin</artifactId>
+        <version>2.4.0</version>
+        <executions>
+          <execution>
+            <id>jmeter-tests</id>
+            <goals>
+              <goal>jmeter</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <testFilesDirectory>${project.build.testOutputDirectory}</testFilesDirectory>
+          <testResultsTimestamp>false</testResultsTimestamp>
+          <ignoreResultFailures>true</ignoreResultFailures>
+          <suppressJMeterOutput>false</suppressJMeterOutput>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
   <!-- More Project Information -->
   <name>testing</name>
   <url>http://maven.apache.org</url>
-
-  <!-- Environment Settings -->
-  <profiles>
-    <profile>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>com.lazerycode.jmeter</groupId>
-            <artifactId>jmeter-maven-plugin</artifactId>
-            <version>2.4.0</version>
-            <executions>
-              <execution>
-                <id>jmeter-tests</id>
-                <phase>integration-test</phase>
-                <goals>
-                  <goal>jmeter</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <testFilesDirectory>${project.build.testOutputDirectory}</testFilesDirectory>
-              <testResultsTimestamp>false</testResultsTimestamp>
-              <ignoreResultFailures>true</ignoreResultFailures>
-              <suppressJMeterOutput>false</suppressJMeterOutput>
-              <remoteConfig>
-                <startServersBeforeTests>true</startServersBeforeTests>
-                <!-- <serverList>${jmeter.servers}</serverList> -->
-
-                <serverList>localhost</serverList>
-                <stopServersAfterTests>true</stopServersAfterTests>
-              </remoteConfig>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>
