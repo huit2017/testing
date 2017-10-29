@@ -3,6 +3,8 @@ package huit2017.testing.scenario;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,11 +17,16 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 import huit2017.testing.page.ReserveConfirmPage;
 import huit2017.testing.page.ReserveInputPage;
 
+/**
+ * java -Dwebdriver.gecko.driver=/Users/yamakawahachidai/testing/geckodriver -Dwebdriver.chrome.driver=/Users/yamakawahachidai/testing/chromeiver -jar selenium-server-standalone-3.6.0.jar -role node
+ */
 public class PageObjectSampleTest {
 	
 	private WebDriver driver;
@@ -27,16 +34,15 @@ public class PageObjectSampleTest {
 	private String saveDir = null;
 
 	@Before
-	public void setUp() {
-		System.setProperty("webdriver.gecko.driver", "geckodriver");
-		driver = new FirefoxDriver();
-		
-//		System.setProperty("webdriver.chrome.driver", "chromedriver");
+	public void setUp() throws MalformedURLException {
+		DesiredCapabilities desiredCapabilities = DesiredCapabilities.firefox();
+		//DesiredCapabilities desiredCapabilities = DesiredCapabilities.chrome();
+		//DesiredCapabilities desiredCapabilities = DesiredCapabilities.safari();
+		driver = new RemoteWebDriver(new URL("http://192.168.33.1:4444/wd/hub"), desiredCapabilities);
+		//driver = new RemoteWebDriver(new URL("http://192.168.32.17:4444/wd/hub"), desiredCapabilities);
 //    		ChromeOptions options = new ChromeOptions();
 //    		options.addArguments("test-type");
 //    		driver = new ChromeDriver(options);
-    		
-//    		driver = new SafariDriver();
 		
 		saveDir = new StringBuilder()
 				.append((new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date()))
@@ -47,7 +53,9 @@ public class PageObjectSampleTest {
 
 	@After
 	public void tearDown() {
-		driver.quit();
+		if (driver != null) {
+			driver.quit();
+		}
 	}
 	
 	private String getPathName() {
